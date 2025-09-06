@@ -9,19 +9,19 @@
         </div>
 
         <!-- Shopping Cart -->
-        <div class="cart-icon" @click="toggleCart">
+        <router-link to="/product-listing" class="cart-icon">
           <svg class="cart-svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z"/>
           </svg>
           <div class="cart-badge" v-if="cartCount > 0">{{ cartCount }}</div>
-        </div>
+        </router-link>
 
         <!-- User Profile -->
-        <div class="profile-icon" @click="toggleProfile">
+        <router-link to="/profile" class="profile-icon">
           <svg class="profile-svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
           </svg>
-        </div>
+        </router-link>
       </div>
     </header>
 

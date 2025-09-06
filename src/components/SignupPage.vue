@@ -1,93 +1,94 @@
 <template>
-  <div class="signup-page">
-    <div class="signup-container">
-      <h1 class="page-title">Sign up page</h1>
+  <div class="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+    <div class="neubrutalist-container p-8 max-w-md w-full">
+      <h1 class="text-4xl font-bold mb-8 border-b-4 border-gray-800 pb-2">Sign Up</h1>
       
-      <div class="form-card">
-        <!-- Avatar Placeholder -->
-        <div class="avatar-placeholder">
-          <div class="avatar-circle">
-            <svg class="avatar-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-          </div>
+      <!-- Signup Form -->
+      <form @submit.prevent="handleSignup" class="space-y-6">
+        <div>
+          <label for="displayName" class="block text-lg font-bold mb-2">Display Name</label>
+          <input 
+            type="text" 
+            id="displayName" 
+            v-model="formData.displayName"
+            placeholder="Your name"
+            class="neubrutalist-input w-full"
+            required
+          >
         </div>
 
-        <!-- Signup Form -->
-        <form @submit.prevent="handleSignup" class="signup-form">
-          <div class="form-group">
-            <label for="displayName">Display Name:</label>
-            <input 
-              type="text" 
-              id="displayName" 
-              v-model="formData.displayName"
-              placeholder="Enter your display name"
-              required
-            />
-          </div>
+        <div>
+          <label for="email" class="block text-lg font-bold mb-2">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            v-model="formData.email"
+            placeholder="your@email.com"
+            class="neubrutalist-input w-full"
+            required
+          >
+        </div>
 
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input 
-              type="email" 
-              id="email" 
-              v-model="formData.email"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
+        <div>
+          <label for="password" class="block text-lg font-bold mb-2">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            v-model="formData.password"
+            placeholder="••••••••"
+            class="neubrutalist-input w-full"
+            required
+          >
+        </div>
 
-          <div class="form-group">
-            <label for="password">Password:</label>
-            <input 
-              type="password" 
-              id="password" 
-              v-model="formData.password"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="confirmPassword">Confirm Password:</label>
+          <div>
+            <label for="confirmPassword" class="block text-lg font-bold mb-2">Confirm Password</label>
             <input 
               type="password" 
               id="confirmPassword" 
               v-model="formData.confirmPassword"
-              placeholder="Confirm your password"
+              placeholder="••••••••"
+              class="neubrutalist-input w-full"
               required
-            />
+            >
           </div>
-
-          <button type="submit" class="signup-button" :disabled="isLoading">
-            <span v-if="!isLoading">Sign up</span>
-            <span v-else>Creating account...</span>
-          </button>
+          
+          <div v-if="errorMessage" class="text-red-500 font-bold p-3 border-2 border-red-500 bg-red-50">
+            {{ errorMessage }}
+          </div>
+          
+          <div v-if="successMessage" class="text-green-500 font-bold p-3 border-2 border-green-500 bg-green-50">
+            {{ successMessage }}
+          </div>
+          
+          <div class="pt-4">
+            <button 
+              type="submit" 
+              class="neubrutalist-button bg-blue-500 text-white w-full text-xl py-3"
+              :disabled="isLoading"
+            >
+              <span v-if="isLoading">Creating account...</span>
+              <span v-else>Sign up</span>
+            </button>
+          </div>
+          
+          <!-- Login Link -->
+          <div class="mt-8 text-center">
+            <p>Already have an account?</p>
+            <router-link to="/login" class="font-bold underline">Login</router-link>
+          </div>
         </form>
-
-        <!-- Error Message -->
-        <div v-if="errorMessage" class="error-message">
-          {{ errorMessage }}
-        </div>
-
-        <!-- Success Message -->
-        <div v-if="successMessage" class="success-message">
-          {{ successMessage }}
-        </div>
-
-        <!-- Login Link -->
-        <div class="login-link">
-          Already have an account? 
-          <router-link to="/login" class="link">Login here</router-link>
-        </div>
       </div>
     </div>
-
-  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
+
+const router = useRouter()
+const authStore = useAuthStore()
 
 // Form data
 const formData = reactive({
@@ -136,19 +137,15 @@ const handleSignup = async () => {
       throw new Error('Passwords do not match')
     }
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    // For demo purposes, simulate successful signup
-    console.log('Signup successful:', formData)
-    // In a real app, you would:
-    // 1. Check if email is unique
-    // 2. Hash the password with bcrypt
-    // 3. Save user to database
-    // 4. Send verification email
-    // 5. Redirect to login or dashboard
+    // Call auth store signup method
+    await authStore.signup(formData.email, formData.password, formData.displayName)
     
     successMessage.value = 'Account created successfully! You can now login.'
+    
+    // Redirect to login after a short delay
+    setTimeout(() => {
+      router.push('/login')
+    }, 2000)
     
     // Clear form
     formData.displayName = ''

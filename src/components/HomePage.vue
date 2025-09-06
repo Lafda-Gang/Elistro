@@ -1,100 +1,201 @@
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
+import { useListingsStore } from '../stores/listings'
+import { storeToRefs } from 'pinia'
+
+const router = useRouter()
+const authStore = useAuthStore()
+const listingsStore = useListingsStore()
+
+const { user, isAuthenticated } = storeToRefs(authStore)
+const { listings, categories } = storeToRefs(listingsStore)
+const { fetchListings, setSelectedCategory } = listingsStore
+
+const searchQuery = ref('')
+
+onMounted(async () => {
+  await fetchListings()
+})
+
+const handleSearch = () => {
+  router.push({
+    path: '/product-listing',
+    query: { search: searchQuery.value }
+  })
+}
+
+const selectCategory = (category: string) => {
+  setSelectedCategory(category)
+  router.push('/product-listing')
+}
+
+const logout = () => {
+  authStore.logout()
+  router.push('/login')
+}
+</script>
+
 <template>
-  <div class="homepage">
+  <div class="min-h-screen">
     <!-- Header -->
-    <header class="header">
-      <div class="header-content">
-        <div class="logo-section">
-          <h1 class="logo">Elistro</h1>
+    <header class="container mx-auto border-b-4 border-gray-800 py-4 px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <h1 class="text-4xl font-bold">Elistro</h1>
         </div>
         
-        <nav class="navigation">
-          <router-link to="/landing" class="nav-link">Discover</router-link>
-          <router-link to="/add-product" class="nav-link">Sell</router-link>
-          <a href="#" class="nav-link active">About</a>
-          <router-link to="/login" class="nav-link">Log in</router-link>
-          <router-link to="/signup" class="cta-button">Start selling</router-link>
+        <nav class="flex flex-wrap gap-4 items-center">
+          <router-link to="/product-listing" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Discover</router-link>
+          <router-link v-if="isAuthenticated" to="/add-product" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Sell</router-link>
+            <router-link v-if="isAuthenticated" to="/purchases" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Purchases</router-link>
+          <router-link v-if="isAuthenticated" to="/cart" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Cart</router-link>
+            <router-link v-if="isAuthenticated" to="/profile" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Profile</router-link>
+          <router-link v-if="!isAuthenticated" to="/login" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Log in</router-link>
+            <router-link v-if="!isAuthenticated" to="/signup" class="px-4 py-2 border-2 border-gray-800 bg-blue-500 text-white hover:bg-blue-600 font-medium">Start selling</router-link>
+          <button v-if="isAuthenticated" @click="logout" class="px-4 py-2 border-2 border-gray-800 bg-red-500 text-white hover:bg-red-600 font-medium">Logout</button>
         </nav>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="max-w-6xl mx-auto px-4 py-12">
       <!-- Hero Section -->
-      <div class="hero-section">
-        <h1 class="hero-title">Go from 0 to $1</h1>
-        <p class="hero-subtitle">
+      <div class="border-4 border-gray-800 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white p-8 mb-12">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 slide-up">Go from 0 to $1</h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-2xl slide-up animation-delay-100">
           Anyone can earn their first dollar online. Just start with what you know, 
           see what sticks, and get paid. It's that easy.
         </p>
         
-        <div class="cta-buttons">
-          <router-link to="/signup" class="primary-button">Start selling</router-link>
-          <router-link to="/login" class="secondary-button">
-            <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-            Search marketplace ...
+        <div class="flex flex-col md:flex-row gap-4 slide-up animation-delay-200">
+          <router-link to="/signup" class="px-8 py-4 border-2 border-gray-800 bg-blue-500 text-white text-xl font-medium">
+            Start selling
           </router-link>
+          
+          <form @submit.prevent="handleSearch" class="flex-grow flex">
+            <input 
+              v-model="searchQuery" 
+              type="text" 
+              placeholder="Search marketplace..." 
+              class="border-2 border-gray-800 p-3 flex-grow text-xl focus:outline-none focus:ring-2 focus:ring-gray-800"
+            >
+            <button type="submit" class="px-6 py-2 border-2 border-gray-800 bg-black text-white text-xl font-medium">
+              Search
+            </button>
+          </form>
         </div>
-        
       </div>
-    </main>
 
     <!-- Features Section -->
-    <section class="features-section">
-      <div class="features-container">
-        <h2 class="features-title">Explore Categories</h2>
-        <div class="features-grid">
-          <div class="feature-card card-1">
-            <div class="feature-icon">📱</div>
-            <h3>Electronics</h3>
-            <p>Phones, laptops, gadgets</p>
+    <section class="mb-12">
+      <h2 class="text-3xl font-bold mb-6 border-b-4 border-gray-800 pb-2">Explore Categories</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div 
+          v-for="category in categories" 
+          :key="category" 
+          @click="selectCategory(category)"
+          class="border-2 border-gray-800 p-4 bg-white text-center cursor-pointer hover:bg-gray-100 transition-colors"
+        >
+          <div class="text-4xl mb-2">
+            {{ 
+              category === 'Electronics' ? '📱' : 
+              category === 'Clothing' ? '👕' : 
+              category === 'Home' ? '🏠' : 
+              category === 'Books' ? '📚' : 
+              category === 'Sports' ? '⚽' : '📦' 
+            }}
           </div>
-          <div class="feature-card card-2">
-            <div class="feature-icon">👕</div>
-            <h3>Fashion</h3>
-            <p>Clothing, shoes, accessories</p>
-          </div>
-          <div class="feature-card card-3">
-            <div class="feature-icon">🏠</div>
-            <h3>Home & Garden</h3>
-            <p>Furniture, decor, tools</p>
-          </div>
-          <div class="feature-card card-4">
-            <div class="feature-icon">🚗</div>
-            <h3>Automotive</h3>
-            <p>Cars, parts, accessories</p>
-          </div>
-          <div class="feature-card card-5">
-            <div class="feature-icon">📚</div>
-            <h3>Books & Media</h3>
-            <p>Books, movies, games</p>
-          </div>
-          <div class="feature-card card-6">
-            <div class="feature-icon">🏃</div>
-            <h3>Sports</h3>
-            <p>Equipment, gear, fitness</p>
-          </div>
-          <div class="feature-card card-7">
-            <div class="feature-icon">🎨</div>
-            <h3>Art & Crafts</h3>
-            <p>Handmade, vintage, collectibles</p>
-          </div>
-          <div class="feature-card card-8">
-            <div class="feature-icon">🍳</div>
-            <h3>Kitchen</h3>
-            <p>Appliances, cookware, utensils</p>
-          </div>
+          <h3 class="font-bold">{{ category }}</h3>
         </div>
       </div>
     </section>
 
-  </div>
-</template>
+    <!-- Featured Products -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-bold mb-6 border-b-4 border-gray-800 pb-2">Featured Products</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div 
+          v-for="listing in listings.slice(0, 6)" 
+          :key="listing.id" 
+          class="neubrutalist-card p-4 cursor-pointer hover:translate-y-[-4px] transition-transform"
+          @click="router.push(`/product/${listing.id}`)"
+        >
+          <div class="aspect-square bg-gray-200 mb-4">
+            <img 
+              :src="listing.imageUrl" 
+              :alt="listing.title" 
+              class="w-full h-full object-cover"
+            >
+          </div>
+          
+          <h3 class="text-xl font-bold mb-2">{{ listing.title }}</h3>
+          <div class="flex justify-between items-center">
+            <span class="text-lg font-bold">${{ listing.price.toFixed(2) }}</span>
+            <span class="text-sm bg-gray-200 px-2 py-1 rounded-md">{{ listing.category }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-8">
+        <router-link to="/product-listing" class="px-4 py-2 border-2 border-gray-800 bg-blue-500 text-white inline-block font-medium">
+          View All Products
+        </router-link>
+      </div>
+    </section>
 
-<script setup lang="ts">
-// Component logic can be added here
-</script>
+    <!-- How It Works -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-bold mb-6 border-b-4 border-gray-800 pb-2">How It Works</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="border-2 border-gray-800 p-6 bg-white text-center">
+          <div class="text-5xl mb-4">🔍</div>
+          <h3 class="text-xl font-bold mb-2">Find</h3>
+          <p>Discover unique second-hand items from sellers around the world.</p>
+        </div>
+        
+        <div class="border-2 border-gray-800 p-6 bg-white text-center">
+          <div class="text-5xl mb-4">💰</div>
+          <h3 class="text-xl font-bold mb-2">Buy</h3>
+          <p>Purchase items securely through our simple checkout process.</p>
+        </div>
+        
+        <div class="border-2 border-gray-800 p-6 bg-white text-center">
+          <div class="text-5xl mb-4">♻️</div>
+          <h3 class="text-xl font-bold mb-2">Sustain</h3>
+          <p>Support sustainability by giving pre-loved items a second life.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-4 border-gray-800 border-t-4 py-8 px-6 bg-white">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+        <div class="mb-6 md:mb-0">
+          <h2 class="text-3xl font-bold">Elistro</h2>
+          <p class="text-gray-600">Sustainable second-hand marketplace</p>
+        </div>
+        
+        <div class="flex gap-4">
+          <a href="#" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">About</a>
+          <a href="#" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Contact</a>
+          <a href="#" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Terms</a>
+          <a href="#" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Privacy</a>
+        </div>
+      </div>
+      
+      <div class="text-center text-gray-600">
+        <p>&copy; {{ new Date().getFullYear() }} Elistro. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>
+</template>
 
 <style scoped>
 .homepage {

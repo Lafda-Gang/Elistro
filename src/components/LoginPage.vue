@@ -1,61 +1,55 @@
 <template>
-  <div class="login-page">
-    <div class="login-container">
-      <h1 class="page-title">Login Page</h1>
+  <div class="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+    <div class="neubrutalist-container p-8 max-w-md w-full">
+      <h1 class="text-4xl font-bold mb-8 border-b-4 border-gray-800 pb-2">Login</h1>
       
-      <div class="form-card">
-        <!-- Avatar Placeholder -->
-        <div class="avatar-placeholder">
-          <div class="avatar-circle">
-            <svg class="avatar-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-          </div>
+      <form @submit.prevent="handleLogin" class="space-y-6">
+        <div>
+          <label for="email" class="block text-lg font-bold mb-2">Email</label>
+          <input 
+            id="email" 
+            v-model="formData.email" 
+            type="email" 
+            placeholder="your@email.com" 
+            class="neubrutalist-input w-full"
+            required
+          >
         </div>
-
-        <!-- Login Form -->
-        <form @submit.prevent="handleLogin" class="login-form">
-          <div class="form-group">
-            <label for="email">Email / Username:</label>
-            <input 
-              type="text" 
-              id="email" 
-              v-model="formData.email"
-              placeholder="Enter your email or username"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="password">Password:</label>
-            <input 
-              type="password" 
-              id="password" 
-              v-model="formData.password"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          <button type="submit" class="login-button" :disabled="isLoading">
-            <span v-if="!isLoading">Login</span>
-            <span v-else>Logging in...</span>
-          </button>
-        </form>
-
-        <!-- Error Message -->
-        <div v-if="errorMessage" class="error-message">
+        
+        <div>
+          <label for="password" class="block text-lg font-bold mb-2">Password</label>
+          <input 
+            id="password" 
+            v-model="formData.password" 
+            type="password" 
+            placeholder="••••••••" 
+            class="neubrutalist-input w-full"
+            required
+          >
+        </div>
+        
+        <div v-if="errorMessage" class="text-red-500 font-bold p-3 border-2 border-red-500 bg-red-50">
           {{ errorMessage }}
+        </div>
+        
+        <div class="pt-4">
+          <button 
+            type="submit" 
+            class="neubrutalist-button bg-blue-500 text-white w-full text-xl py-3"
+            :disabled="isLoading"
+          >
+            <span v-if="isLoading">Logging in...</span>
+            <span v-else>Login</span>
+          </button>
         </div>
 
         <!-- Sign Up Link -->
-        <div class="signup-link">
-          Don't have an account? 
-          <router-link to="/signup" class="link">Sign up here</router-link>
+        <div class="mt-8 text-center">
+          <p>Don't have an account?</p>
+          <router-link to="/signup" class="font-bold underline">Sign up</router-link>
         </div>
-      </div>
+      </form>
     </div>
-
   </div>
 </template>
 
