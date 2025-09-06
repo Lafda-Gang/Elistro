@@ -10,7 +10,7 @@ const goHome = () => {
 
 <template>
   <div class="neubrutalist-container p-4 max-w-4xl mx-auto text-center py-20">
-    <h1 class="text-6xl font-bold mb-4 border-b-4 border-gray-800 pb-2 inline-block">404</h1>
+    <h1 class="text-6xl font-bold mb-4 border-b-4 border-gray-900 pb-2 inline-block">404</h1>
     
     <div class="my-8">
       <h2 class="text-3xl font-bold mb-4">Page Not Found</h2>

@@ -64,7 +64,7 @@ const continueShopping = () => {
 
 <template>
   <div class="neubrutalist-container p-4 max-w-4xl mx-auto">
-    <h1 class="text-4xl font-bold mb-8 border-b-4 border-gray-800 pb-2">Your Cart</h1>
+    <h1 class="text-4xl font-bold mb-8 border-b-4 border-gray-900 pb-2">Your Cart</h1>
     
     <div v-if="loading" class="flex justify-center items-center h-40">
       <div class="animate-pulse text-xl">Loading cart...</div>

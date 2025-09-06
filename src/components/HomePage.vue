@@ -16,7 +16,12 @@ const { fetchListings, setSelectedCategory } = listingsStore
 const searchQuery = ref('')
 
 onMounted(async () => {
-  await fetchListings()
+  try {
+    await fetchListings()
+  } catch (error) {
+    console.error('Failed to fetch listings:', error)
+    // App will still work even if API call fails
+  }
 })
 
 const handleSearch = () => {
@@ -40,21 +45,21 @@ const logout = () => {
 <template>
   <div class="min-h-screen">
     <!-- Header -->
-    <header class="container mx-auto border-b-4 border-gray-800 py-4 px-6">
+    <header class="container mx-auto border-b-4 border-gray-900 py-4 px-6">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="mb-4 md:mb-0">
           <h1 class="text-4xl font-bold">Elistro</h1>
         </div>
         
         <nav class="flex flex-wrap gap-4 items-center">
-          <router-link to="/product-listing" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Discover</router-link>
-          <router-link v-if="isAuthenticated" to="/add-product" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Sell</router-link>
-            <router-link v-if="isAuthenticated" to="/purchases" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Purchases</router-link>
-          <router-link v-if="isAuthenticated" to="/cart" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Cart</router-link>
-            <router-link v-if="isAuthenticated" to="/profile" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Profile</router-link>
-          <router-link v-if="!isAuthenticated" to="/login" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Log in</router-link>
-            <router-link v-if="!isAuthenticated" to="/signup" class="px-4 py-2 border-2 border-gray-800 bg-blue-500 text-white hover:bg-blue-600 font-medium">Start selling</router-link>
-          <button v-if="isAuthenticated" @click="logout" class="px-4 py-2 border-2 border-gray-800 bg-red-500 text-white hover:bg-red-600 font-medium">Logout</button>
+          <router-link to="/product-listing" class="px-4 py-2 border-2 border-gray-900 bg-white hover:bg-gray-100 font-medium">Discover</router-link>
+          <router-link v-if="isAuthenticated" to="/add-product" class="px-4 py-2 border-2 border-gray-900 bg-white hover:bg-gray-100 font-medium">Sell</router-link>
+            <router-link v-if="isAuthenticated" to="/purchases" class="px-4 py-2 border-2 border-gray-900 bg-white hover:bg-gray-100 font-medium">Purchases</router-link>
+          <router-link v-if="isAuthenticated" to="/cart" class="px-4 py-2 border-2 border-gray-900 bg-white hover:bg-gray-100 font-medium">Cart</router-link>
+            <router-link v-if="isAuthenticated" to="/profile" class="px-4 py-2 border-2 border-gray-900 bg-white hover:bg-gray-100 font-medium">Profile</router-link>
+          <router-link v-if="!isAuthenticated" to="/login" class="px-4 py-2 border-2 border-gray-900 bg-white hover:bg-gray-100 font-medium">Log in</router-link>
+            <router-link v-if="!isAuthenticated" to="/signup" class="px-4 py-2 border-2 border-gray-900 bg-blue-500 text-white hover:bg-blue-600 font-medium">Start selling</router-link>
+          <button v-if="isAuthenticated" @click="logout" class="px-4 py-2 border-2 border-gray-900 bg-red-500 text-white hover:bg-red-600 font-medium">Logout</button>
         </nav>
       </div>
     </header>
@@ -62,7 +67,7 @@ const logout = () => {
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-4 py-12">
       <!-- Hero Section -->
-      <div class="border-4 border-gray-800 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white p-8 mb-12">
+      <div class="border-4 border-gray-900 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] bg-white p-8 mb-12">
         <h1 class="text-5xl md:text-6xl font-bold mb-6 slide-up">Go from 0 to $1</h1>
         <p class="text-xl md:text-2xl mb-8 max-w-2xl slide-up animation-delay-100">
           Anyone can earn their first dollar online. Just start with what you know, 
@@ -70,7 +75,7 @@ const logout = () => {
         </p>
         
         <div class="flex flex-col md:flex-row gap-4 slide-up animation-delay-200">
-          <router-link to="/signup" class="px-8 py-4 border-2 border-gray-800 bg-blue-500 text-white text-xl font-medium">
+          <router-link to="/signup" class="px-8 py-4 border-2 border-gray-900 bg-blue-500 text-white text-xl font-medium">
             Start selling
           </router-link>
           
@@ -79,9 +84,9 @@ const logout = () => {
               v-model="searchQuery" 
               type="text" 
               placeholder="Search marketplace..." 
-              class="border-2 border-gray-800 p-3 flex-grow text-xl focus:outline-none focus:ring-2 focus:ring-gray-800"
+              class="border-2 border-gray-900 p-3 flex-grow text-xl focus:outline-none focus:ring-2 focus:ring-gray-900"
             >
-            <button type="submit" class="px-6 py-2 border-2 border-gray-800 bg-black text-white text-xl font-medium">
+            <button type="submit" class="px-6 py-2 border-2 border-gray-900 bg-black text-white text-xl font-medium">
               Search
             </button>
           </form>
@@ -90,13 +95,13 @@ const logout = () => {
 
     <!-- Features Section -->
     <section class="mb-12">
-      <h2 class="text-3xl font-bold mb-6 border-b-4 border-gray-800 pb-2">Explore Categories</h2>
+      <h2 class="text-3xl font-bold mb-6 border-b-4 border-gray-900 pb-2">Explore Categories</h2>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <div 
           v-for="category in categories" 
           :key="category" 
           @click="selectCategory(category)"
-          class="border-2 border-gray-800 p-4 bg-white text-center cursor-pointer hover:bg-gray-100 transition-colors"
+          class="border-2 border-gray-900 p-4 bg-white text-center cursor-pointer hover:bg-gray-100 transition-colors"
         >
           <div class="text-4xl mb-2">
             {{ 
@@ -114,7 +119,7 @@ const logout = () => {
 
     <!-- Featured Products -->
     <section class="mb-12">
-      <h2 class="text-3xl font-bold mb-6 border-b-4 border-gray-800 pb-2">Featured Products</h2>
+      <h2 class="text-3xl font-bold mb-6 border-b-4 border-gray-900 pb-2">Featured Products</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div 
@@ -140,7 +145,7 @@ const logout = () => {
       </div>
       
       <div class="text-center mt-8">
-        <router-link to="/product-listing" class="px-4 py-2 border-2 border-gray-800 bg-blue-500 text-white inline-block font-medium">
+        <router-link to="/product-listing" class="px-4 py-2 border-2 border-gray-900 bg-blue-500 text-white inline-block font-medium">
           View All Products
         </router-link>
       </div>
@@ -148,22 +153,22 @@ const logout = () => {
 
     <!-- How It Works -->
     <section class="mb-12">
-      <h2 class="text-3xl font-bold mb-6 border-b-4 border-gray-800 pb-2">How It Works</h2>
+      <h2 class="text-3xl font-bold mb-6 border-b-4 border-gray-900 pb-2">How It Works</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="border-2 border-gray-800 p-6 bg-white text-center">
+        <div class="border-2 border-gray-900 p-6 bg-white text-center">
           <div class="text-5xl mb-4">🔍</div>
           <h3 class="text-xl font-bold mb-2">Find</h3>
           <p>Discover unique second-hand items from sellers around the world.</p>
         </div>
         
-        <div class="border-2 border-gray-800 p-6 bg-white text-center">
+        <div class="border-2 border-gray-900 p-6 bg-white text-center">
           <div class="text-5xl mb-4">💰</div>
           <h3 class="text-xl font-bold mb-2">Buy</h3>
           <p>Purchase items securely through our simple checkout process.</p>
         </div>
         
-        <div class="border-2 border-gray-800 p-6 bg-white text-center">
+        <div class="border-2 border-gray-900 p-6 bg-white text-center">
           <div class="text-5xl mb-4">♻️</div>
           <h3 class="text-xl font-bold mb-2">Sustain</h3>
           <p>Support sustainability by giving pre-loved items a second life.</p>
@@ -173,7 +178,7 @@ const logout = () => {
   </main>
 
   <!-- Footer -->
-  <footer class="border-4 border-gray-800 border-t-4 py-8 px-6 bg-white">
+  <footer class="border-4 border-gray-900 border-t-4 py-8 px-6 bg-white">
     <div class="max-w-6xl mx-auto">
       <div class="flex flex-col md:flex-row justify-between items-center mb-8">
         <div class="mb-6 md:mb-0">
@@ -182,10 +187,10 @@ const logout = () => {
         </div>
         
         <div class="flex gap-4">
-          <a href="#" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">About</a>
-          <a href="#" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Contact</a>
-          <a href="#" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Terms</a>
-          <a href="#" class="px-4 py-2 border-2 border-gray-800 bg-white hover:bg-gray-100 font-medium">Privacy</a>
+          <a href="#" class="px-4 py-2 border-2 border-gray-900 bg-white hover:bg-gray-100 font-medium">About</a>
+          <a href="#" class="px-4 py-2 border-2 border-gray-900 bg-white hover:bg-gray-100 font-medium">Contact</a>
+          <a href="#" class="px-4 py-2 border-2 border-gray-900 bg-white hover:bg-gray-100 font-medium">Terms</a>
+          <a href="#" class="px-4 py-2 border-2 border-gray-900 bg-white hover:bg-gray-100 font-medium">Privacy</a>
         </div>
       </div>
       

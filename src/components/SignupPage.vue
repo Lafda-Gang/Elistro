@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex items-center justify-center p-4 bg-gray-50">
     <div class="neubrutalist-container p-8 max-w-md w-full">
-      <h1 class="text-4xl font-bold mb-8 border-b-4 border-gray-800 pb-2">Sign Up</h1>
+      <h1 class="text-4xl font-bold mb-8 border-b-4 border-gray-900 pb-2">Sign Up</h1>
       
       <!-- Signup Form -->
       <form @submit.prevent="handleSignup" class="space-y-6">

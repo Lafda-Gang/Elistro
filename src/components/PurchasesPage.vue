@@ -31,7 +31,7 @@ const goToProductPage = (productId: string) => {
 
 <template>
   <div class="neubrutalist-container p-4 max-w-4xl mx-auto">
-    <h1 class="text-4xl font-bold mb-8 border-b-4 border-gray-800 pb-2">Your Purchases</h1>
+    <h1 class="text-4xl font-bold mb-8 border-b-4 border-gray-900 pb-2">Your Purchases</h1>
     
     <div v-if="loading" class="flex justify-center items-center h-40">
       <div class="animate-pulse text-xl">Loading purchases...</div>
@@ -46,7 +46,7 @@ const goToProductPage = (productId: string) => {
     
     <div v-else class="space-y-8">
       <div v-for="purchase in purchases" :key="purchase.id" class="neubrutalist-card p-4">
-        <div class="border-b-2 border-gray-800 pb-2 mb-4">
+        <div class="border-b-2 border-gray-900 pb-2 mb-4">
           <div class="flex justify-between items-center">
             <h3 class="text-xl font-bold">Order #{{ purchase.id.substring(0, 8) }}</h3>
             <span class="text-gray-600">{{ formatDate(purchase.purchaseDate) }}</span>
